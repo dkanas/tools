@@ -1,0 +1,37 @@
+#! /usr/bin/env python3
+# This script takes a PostgreSQL connection URI in the libpq format
+# and converts it to a JDBC URI:
+# $ pg2jdbc postgres://user:password@host:port/db_name
+# jdbc:postgresql://host:port/db_name?user=user&password=password
+#
+# You can also pipe a command that outputs a libpq-formatted postgres URI and
+# pipe it into the script:
+# $ some_command | pg2jdbc
+
+import sys
+import re
+
+
+pg_uri_pattern = r'postgres:\/\/(?P<user>[\w-]+):(?P<password>[\w]+)@(?P<hostname>[\w.]+):(?P<port>[\d]+)\/(?P<db_name>[\w-]+)'
+
+
+def parse_uri(uri):
+    return re.compile(pg_uri_pattern).match(uri).groups()
+
+
+def build_jdbc_uri(db_params):
+    (user, password, host, port, db_name) = db_params
+    return f'jdbc:postgresql://{host}:{port}/{db_name}?user={user}&password={password}'
+
+
+def get_uri_from_input():
+    return sys.argv[1] if len(sys.argv) > 1 else sys.stdin.read()
+
+
+def main():
+    pg_uri = get_uri_from_input()
+    jdbc_uri = build_jdbc_uri(parse_uri(pg_uri))
+    print(jdbc_uri)
+
+
+main()

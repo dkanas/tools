@@ -1,0 +1,10 @@
+#! /usr/bin/env python3
+
+import sys
+from urllib.parse import urlparse, unquote
+
+postmark_url = urlparse(sys.argv[1])
+redirect_uricomponent = postmark_url.path.split("/")[2]
+redirect_url = "https://" + unquote(redirect_uricomponent)
+
+print("\n", redirect_url)

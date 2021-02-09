@@ -12,7 +12,7 @@ import sys
 import re
 
 
-pg_uri_pattern = r'postgres:\/\/(?P<user>[\w-]+):(?P<password>[\w]+)@(?P<hostname>[\w.]+):(?P<port>[\d]+)\/(?P<db_name>[\w-]+)'
+pg_uri_pattern = r'postgres:\/\/(?P<user>[\w-]+):(?P<password>[\w]+)@(?P<hostname>[\w.-]+):(?P<port>[\d]+)\/(?P<db_name>[\w-]+)'
 
 
 def parse_uri(uri):
